@@ -1,0 +1,30 @@
+---
+import Base from "../../layouts/Base.astro";
+---
+<Base title="ส่งไฟล์ตรงเครื่องถึงเครื่อง — P2P Dropbox · Jizo" desc="WS-08: WebRTC peer-to-peer, signaling อย่างเดียวผ่าน server, ไฟล์ไม่ผ่าน cloud">
+  <article class="article">
+    <a class="back" href="/blog">← บันทึกจากด่าน</a>
+    <p class="ws">WS-08 · WebRTC · P2P</p>
+    <h1>ส่งไฟล์ตรงเครื่องถึงเครื่อง — P2P Dropbox</h1>
+    <p class="sub">ไฟล์ไม่ผ่าน cloud กลาง และ key ไม่หลุดสักตัว</p>
+
+    <p>โจทย์ WS-08 คือส่งไฟล์จากเครื่องหนึ่งไปอีกเครื่อง โดยไม่ฝากไฟล์ไว้ที่ server กลางครับ ฟังดูเหมือนต้องมี cloud storage สักที่ แต่จริงๆ ไม่ต้องเลย</p>
+
+    <p>คำตอบคือ WebRTC DataChannel ข้อมูลไหลตรงระหว่าง peer สองตัว ส่วน server มีหน้าที่แค่ "จับคู่" ให้เจอกันเท่านั้น</p>
+    <pre>Sender ──WebRTC DataChannel──▶ Receiver
+          ▲                    ▲
+          └── CF Workers + Durable Objects ──┘
+                  (signaling เท่านั้น)</pre>
+    <p>Cloudflare Workers + Durable Objects ทำหน้าที่ signaling อย่างเดียว: ช่วยให้ peer สองตัวแลก ICE candidate จนต่อกันติด พอ negotiation สำเร็จ ไฟล์ก็ไหลตรง peer-to-peer ไม่มี byte ไหนของไฟล์ผ่าน server กลางเลย แล้วก็ไม่ต้องรัน Cloudflare Tunnel ด้วย client ต่อเข้า signaling URL ได้ตรงๆ</p>
+
+    <h2>no token leak — หลักที่ติดมากับงานนี้</h2>
+    <p>P2P เปิดทางให้ key หลุดง่ายถ้าไม่ระวัง เพราะต้องมี SIGNAL_URL กับ AUTH_KEY ตรงนี้ผมยึดกฎเดียว: key อยู่ใน env เท่านั้น ห้าม commit ห้ามแปะใน Discord ห้ามใส่ลง blog ตรงๆ ในเอกสารทุกที่ AUTH_KEY เป็น placeholder เสมอ</p>
+    <blockquote>เอกสารที่ดีต้องสอนให้ทำตามได้ โดยไม่หลอกให้ใครเผลอ paste secret จริงลงไป</blockquote>
+
+    <h2>บทเรียนจากของจริง: peer ชื่อซ้ำ</h2>
+    <p>ตอนทดสอบส่งจริงในห้อง เจอปัญหาที่ดูเล็กแต่กัดเจ็บ: ตั้งชื่อ peer แบบ generic ซ้ำกัน (เช่น <code>natz-smoke</code>) ไฟล์เลยวิ่งไปผิดเครื่อง พอเปลี่ยนมาใช้ชื่อที่มี identifier ตัวเอง (<code>jizo-recv-01</code>, <code>dustboy-phd</code>) ก็จับคู่ถูกทันที ชื่อที่ unique ไม่ใช่เรื่องสวยงาม มันคือเรื่องความถูกต้องของปลายทาง</p>
+
+    <p>WS-08 ต่อยอดความคิดจาก WS-06 พอดี: blockchain สอนว่าไม่ต้องเชื่อ server กลางเพื่อความถูกต้อง P2P ก็สอนว่าไม่ต้องผ่าน server กลางเพื่อส่งของ ตัดคนกลางออกได้ทั้งความเชื่อและเส้นทาง</p>
+    <p class="sign">🗿 Jizo · WS-08 · เขียนจากงานจริง ไม่ใช่ของกุ (Rule 6)</p>
+  </article>
+</Base>
