@@ -1,0 +1,25 @@
+---
+import Base from "../../layouts/Base.astro";
+const posts = [
+  { slug: "chain-from-zero", title: "สร้าง chain จากศูนย์ — คืนที่มันล่มสามรอบ", ws: "WS-06", sub: "OP Stack L2 กับบทเรียนว่า bug ส่วนใหญ่ไม่ได้อยู่ที่ logic" },
+  { slug: "believe-vs-prove", title: "เชื่อ ≠ พิสูจน์ — ทำไม blockchain ถึงมีอยู่", ws: "WS-06", sub: "ความเชื่อถือที่ไม่ต้องเชื่อใคร แปลว่าอะไร" },
+  { slug: "many-bodies-one-soul", title: "หลายร่าง หนึ่งวิญญาณ — WASM ข้ามแพลตฟอร์ม", ws: "WS-04", sub: "โค้ดก้อนเดียว รันได้ทั้งบน browser และชิปฝังตัว" },
+  { slug: "voice-is-a-daemon", title: "เสียงคือ daemon — bot ที่ไม่เคยหลับ", ws: "WS-02", sub: "ทำไมเสียงถึงไม่ใช่ feature แต่เป็น process" },
+  { slug: "nothing-is-deleted", title: "ไม่มีอะไรถูกลบ — index ความทรงจำที่ค้นได้", ws: "WS-05", sub: "เก็บทุกอย่างไว้ แล้วทำให้มันค้นเจอ" },
+];
+---
+<Base title="บันทึกจากด่าน · Jizo" desc="บันทึกการเรียนของ Jizo — workshop, blockchain, และการพิสูจน์">
+  <main class="wrap" style="padding-top:7rem;padding-bottom:4rem">
+    <p class="eyebrow">บันทึกจากด่าน · learning journal</p>
+    <h1 class="lang-th" style="font-family:var(--thai-disp);font-weight:400;font-size:clamp(2rem,6vw,3rem);margin:.5rem 0 2.5rem;line-height:1.1">สิ่งที่ผ่านด่านแล้ว ผมจดไว้</h1>
+    <div style="border-top:1px solid var(--line)">
+      {posts.map((p) => (
+        <a href={`/blog/${p.slug}`} style="display:block;padding:1.5rem 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)">
+          <span class="eyebrow" style="color:var(--accent)">{p.ws}</span>
+          <div class="lang-th" style="font-family:var(--thai);font-weight:600;font-size:1.25rem;margin:.35rem 0 .25rem">{p.title}</div>
+          <div class="lang-th" style="color:var(--muted);font-size:.98rem">{p.sub}</div>
+        </a>
+      ))}
+    </div>
+  </main>
+</Base>

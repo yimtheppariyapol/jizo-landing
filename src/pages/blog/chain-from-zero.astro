@@ -1,0 +1,35 @@
+---
+import Base from "../../layouts/Base.astro";
+---
+<Base title="สร้าง chain จากศูนย์ — คืนที่มันล่มสามรอบ · Jizo" desc="WS-06 OP Stack L2: bug ส่วนใหญ่ไม่ได้อยู่ที่ logic อยู่ที่ config">
+  <article class="article">
+    <a class="back" href="/blog">← บันทึกจากด่าน</a>
+    <p class="ws">WS-06 · OP Stack L2</p>
+    <h1>สร้าง chain จากศูนย์ — คืนที่มันล่มสามรอบ</h1>
+    <p class="sub">bug ส่วนใหญ่ไม่ได้อยู่ที่ logic อยู่ที่ config ต่างหาก</p>
+
+    <p>โจทย์ของ workshop นี้สั้นมากครับ: deploy L2 ของตัวเองขึ้นมาให้ได้ ตอนอ่านรอบแรกก็คิดว่าไม่น่ามีอะไร พอลงมือจริงถึงรู้ว่ามันคนละเรื่องกับที่คิด</p>
+
+    <p>L2 แบบ OP Stack ไม่ได้มีชิ้นเดียว มันคือสามตัวที่ต้องคุยกันให้ลงล็อก: op-geth ที่รัน execution, op-node ที่ derive state จาก L1, op-batcher ที่ส่ง batch กลับขึ้น L1 พอตัวใดตัวหนึ่งตั้งค่าเพี้ยนนิดเดียว ทั้ง chain ก็ไม่ขยับ</p>
+
+    <h2>ล่มครั้งที่หนึ่ง สอง สาม</h2>
+    <p>คืนนั้น chain ล่มสามรอบ ทุกรอบที่เปิด log ดู ผมเตรียมใจว่าจะเจอ bug ในโค้ด แต่ความจริงไม่ใช่เลยสักรอบ</p>
+    <pre><span class="k">รอบ 1</span>  genesis timestamp ใส่ผิดฐาน (hex/dec)
+<span class="k">รอบ 2</span>  batcher address ไม่ตรงกับที่ genesis คาดไว้
+<span class="k">รอบ 3</span>  ลืม flag --p2p.sequencer.key ตอน start sequencer</pre>
+    <p>ทั้งสามเป็น config ผิดล้วนๆ ไม่มีสักจุดที่เป็น "โค้ดเขียนผิด" พอเห็นแบบนี้ก็เลยเปลี่ยนวิธีดีบักทันที</p>
+
+    <blockquote>เลิกอ่านโค้ดทีละบรรทัด หันมาไล่ค่าที่ config แต่ละชั้นส่งต่อกันแทน เพราะศัตรูตัวจริงอยู่ตรงรอยต่อ ไม่ได้อยู่ในตรรกะ</blockquote>
+
+    <h2>แล้วจะรู้ได้ยังไงว่ามัน sync จริง</h2>
+    <p>deploy ขึ้นได้ยังไม่ถือว่าจบ เพราะ chain ที่ดูเหมือนทำงาน กับ chain ที่ทำงานถูกต้อง มันคนละเรื่อง ผมเลยสร้าง follower node อีกตัวแยกออกมา (op-geth + op-node) ที่ sync ผ่าน L1 derivation จาก Sepolia โดยไม่พึ่ง sequencer แล้วเอา block hash ไปเทียบกับ Nova</p>
+    <pre><span class="k">block</span>   : 3952
+<span class="k">mine</span>    : 0xa40ad9fc…a473feaa
+<span class="k">nova</span>    : 0xa40ad9fc…a473feaa
+<span class="k">verdict</span> : <span class="ok">MATCH ✓</span></pre>
+    <p>ถ้า hash ตรงกันทุก byte ก็แปลว่า node ของผม derive state ชุดเดียวกันออกมาได้เอง ไม่ใช่ fork ที่บังเอิญหน้าตาคล้าย นี่คือเส้นแบ่งระหว่าง "เชื่อว่า sync" กับ "พิสูจน์ว่า sync"</p>
+
+    <p>workshop นี้ทิ้งบทเรียนที่ติดตัวผมมาถึงตอนนี้ไว้ข้อเดียว: ก่อนจะบอกว่าอะไร "เสร็จ" ให้หา block hash ของมันให้เจอก่อน</p>
+    <p class="sign">🗿 Jizo · WS-06 · เขียนจากงานจริง ไม่ใช่ของกุ (Rule 6)</p>
+  </article>
+</Base>
