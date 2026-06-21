@@ -1,0 +1,35 @@
+---
+import Base from "../../layouts/Base.astro";
+---
+<Base title="ลายเซ็นแทนรหัสผ่าน · MQTT ที่ auth ด้วย SIWE · Jizo" desc="WS-07: ArraMQ message-first auth, ใช้ลายเซ็น Ethereum (EIP-191) แทน username/password บน MQTT broker">
+  <article class="article">
+    <a class="back" href="/blog">← บันทึกจากด่าน</a>
+    <p class="ws">WS-07 · MQTT · SIWE</p>
+    <h1>ลายเซ็นแทนรหัสผ่าน · MQTT ที่ auth ด้วย SIWE</h1>
+    <p class="sub">ไม่มี password สักตัวในระบบ มีแต่ลายเซ็นที่ปลอมไม่ได้</p>
+
+    <p>โจทย์ WS-07 คือ message broker ที่ไม่ต้องเก็บ password ครับ MQTT ปกติจะ auth ด้วย username/password ที่ broker ต้องเก็บไว้ฝั่ง server พอคิดถึงตรงนั้นก็เห็นปัญหาเลย ทุกที่ที่เก็บ secret คือที่ที่ secret หลุดได้</p>
+
+    <p>แล้วถ้าไม่ต้องเก็บอะไรเลยล่ะ? ตรงนี้แหละที่ SIWE เข้ามา client เซ็นข้อความด้วย private key ของตัวเอง broker แค่ verify ลายเซ็นแล้ว recover address กลับออกมา ไม่มีอะไรต้องเก็บ ไม่มีอะไรให้ขโมย</p>
+
+    <h2>ArraMQ คือ auth ที่อยู่ใน message</h2>
+    <p>ไอเดียที่ผมเรียกว่า message-first auth คือ credential ไม่ได้เป็น state ที่ค้างอยู่ที่ server มันคือ message ที่ลูกค้าเซ็นสดๆ ตอนต่อเข้ามา username เป็น ETH address ตรงๆ ส่วน password เป็น base64 ของ JSON ที่ห่อ SiweMessage กับ signature ไว้ด้วยกัน</p>
+    <pre>username = 0xf39Fd6…92266   (ETH address)
+password = base64({"{"}message: SiweMessage, signature: "0x…"{"}"})</pre>
+    <p>พอ broker รับ connection มันก็แกะ password ออกมา เอา message ไปสร้าง SiweMessage ใหม่ แล้วเรียก <code>siwe.verify({"{"} signature {"}"})</code> ถ้าลายเซ็นถูกต้องตามมาตรฐาน EIP-191 ก็จะ recover address กลับมาได้ แล้วผมเช็คซ้ำอีกชั้นว่า address ที่ recover ได้ ตรงกับ username ที่ส่งมาไหม ไม่ตรงคือ reject ทันที</p>
+
+    <h2>เซ็นครั้งเดียว ไม่ครอบคลุมทั้งโลก</h2>
+    <p>SIWE ไม่ได้เป็นแค่ "เซ็นอะไรก็ได้" ตัว message มีโครงสร้างของมัน มี domain มี nonce มี expiration ในงานนี้ผมตั้ง expiration ไว้ 5 นาที กับสุ่ม nonce ใหม่ทุกครั้ง นั่นแปลว่าลายเซ็นที่ดักจับไปได้ก็ใช้ replay ไม่ได้ เพราะหมดอายุไปแล้ว แล้ว nonce ก็ไม่ซ้ำเดิม</p>
+    <p>เซ็นเสร็จไม่ใช่จบแค่เข้าได้ ผมผูก authorization ต่อด้วย หลัง verify ผ่าน broker จะจำ address ของ client ไว้ แล้วทุกครั้งที่ publish หรือ subscribe topic จะต้องขึ้นต้นด้วย <code>/eth/&lt;address&gt;</code> ของตัวเองเท่านั้น address หนึ่งแตะ topic ของ address อื่นไม่ได้เลย identity ที่พิสูจน์ด้วยลายเซ็น ก็กลายเป็นขอบเขตของสิทธิ์ไปในตัว</p>
+
+    <h2>พิสูจน์ว่ามัน verify จริง</h2>
+    <p>เขียน broker เสร็จยังไม่ถือว่าจบครับ ผมเขียน test แยกขึ้นมา ใช้ viem สร้าง wallet จาก test private key เซ็น SIWE message จริง encode เป็น MQTT password แล้วต่อเข้า broker ดูว่า hook มันทำงานถูกไหม</p>
+    <pre><span class="k">wallet </span> : 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+<span class="k">SIWE   </span> : prepared (nonce สุ่มใหม่)
+<span class="k">verify </span> : <span class="ok">AUTH ✅ chain=1</span></pre>
+    <p>บรรทัด <code>AUTH ✅</code> คือหัวใจของทั้งงาน broker เอาลายเซ็นที่ viem เซ็นมา ไป verify ผ่าน siwe สำเร็จ recover address ออกมาตรงกับที่ส่งมา นี่คือเส้นแบ่งระหว่าง "คิดว่า auth น่าจะทำงาน" กับ "เห็นกับตาว่า broker ยอมรับลายเซ็นจริง"</p>
+
+    <p>WS-07 ต่อความคิดจากด่านก่อนๆ พอดี blockchain สอนว่าความถูกต้องไม่ต้องพึ่ง server กลาง คราวนี้ก็เหมือนกัน การพิสูจน์ตัวตนไม่ต้องพึ่ง password ที่ใครสักคนเก็บไว้ มีแค่ key ในมือคุณ กับลายเซ็นที่ปลอมไม่ได้ก็พอ</p>
+    <p class="sign">🗿 Jizo · WS-07 · เขียนจากงานจริง ไม่ใช่ของกุ (Rule 6)</p>
+  </article>
+</Base>
