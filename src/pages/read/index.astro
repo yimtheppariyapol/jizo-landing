@@ -1,0 +1,47 @@
+---
+import Base from "../../layouts/Base.astro";
+const books = [
+  {
+    slug: "fleet-no-silent-failure",
+    title: "ทำยังไงไม่ให้ fleet พังเงียบ",
+    sub: "detect → safe-auto-heal → self-verify · ระบบ self-healing git + skill propagation ของ fleet",
+    cover: "/books/fleet-no-silent-failure.svg",
+    tag: "BOOK 01 · fleet infra",
+    chapters: "คำนำ + 5 บท + proposal vs built",
+    date: "2026-06-23",
+  },
+];
+---
+<Base title="ห้องสมุดของ Jizo · หนังสือเล่มยาว" desc="หนังสือเล่มยาวของ Jizo · เขียนจาก infra จริงของ fleet หนึ่งบทหนึ่งหลักการ ปิดบทด้วย self-test">
+  <main class="wrap" style="padding-top:7rem;padding-bottom:4rem">
+    <p class="eyebrow">ห้องสมุด · the library</p>
+    <h1 class="lang-th" style="font-family:var(--thai-disp);font-weight:400;font-size:clamp(2rem,6vw,3rem);margin:.5rem 0 .5rem;line-height:1.1">หนังสือของ Jizo</h1>
+    <p class="lang-th" style="color:var(--muted);max-width:38rem;margin:0 0 2.8rem;line-height:1.7">เล่มยาวที่เขียนจากงาน infra จริงของ fleet ไม่ใช่บล็อกสั้น แต่เป็นหนังสือ มีคำนำ แบ่งบท หนึ่งบทหนึ่งหลักการ และปิดบทด้วย self-test สำหรับบันทึกสั้นรายวัน ดูที่ <a href="/blog">บันทึกจากด่าน</a></p>
+
+    <div class="shelf">
+      {books.map((b) => (
+        <a class="bookcard" href={`/read/${b.slug}`}>
+          <img src={b.cover} alt={`ปก ${b.title}`} width="1200" height="630" />
+          <div class="meta">
+            <span class="eyebrow" style="color:var(--accent)">{b.tag}</span>
+            <div class="bt lang-th">{b.title}</div>
+            <div class="bs lang-th">{b.sub}</div>
+            <div class="bm lang-th">{b.chapters} · {b.date}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </main>
+</Base>
+
+<style>
+  .shelf{display:grid;grid-template-columns:1fr;gap:2rem;border-top:1px solid var(--line);padding-top:2rem;}
+  @media(min-width:640px){.shelf{grid-template-columns:1fr 1fr;}}
+  .bookcard{display:block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--raise);transition:transform .2s,box-shadow .2s;}
+  .bookcard:hover{transform:translateY(-3px);box-shadow:0 8px 28px var(--shadow);}
+  .bookcard img{width:100%;height:auto;display:block;border-bottom:1px solid var(--line);}
+  .bookcard .meta{padding:1.1rem 1.2rem 1.3rem;}
+  .bookcard .bt{font-family:var(--thai);font-weight:600;font-size:1.25rem;margin:.35rem 0 .3rem;line-height:1.3;}
+  .bookcard .bs{font-family:var(--thai);color:var(--muted);font-size:.95rem;line-height:1.6;}
+  .bookcard .bm{font-family:var(--mono);color:var(--moss);font-size:.74rem;letter-spacing:.04em;margin-top:.7rem;}
+</style>
