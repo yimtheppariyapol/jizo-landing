@@ -354,10 +354,10 @@ fi
           <tr><td><code>fleet-git-health.sh</code> ตรวจ 4 invariant + self-verify</td><td><b class="ok">BUILT</b> · สคริปต์อยู่ที่ <code>~/.hermes/bin/</code> รันมือผ่าน อ่านโค้ดได้ในเล่ม</td></tr>
           <tr><td>propagation chain ผ่าน hermes external_dirs</td><td><b class="ok">BUILT</b> · <code>~/.hermes/config.yaml</code> ชี้ <code>external_dirs: /root/labs/skills-mirror/skills</code> จริง</td></tr>
           <tr><td>ลำดับ recover ผ่าน codex review</td><td><b class="ok">REVIEWED</b> · ได้ GO ก่อนเขียน policy SAFE-auto ลงสคริปต์</td></tr>
-          <tr><td>systemd timer q30min เรียก health ทุก 30 นาที</td><td><b class="warn">PROPOSED / ต้องติดตั้ง</b> · ออกแบบล้อ jizo-health-monitor แต่ตอนเขียนยังไม่ยืนยัน unit ที่ติดตั้งบน box ตอนนี้ยังเป็นการรันมือ</td></tr>
+          <tr><td>systemd timer q30min เรียก health ทุก 30 นาที</td><td><b style="color:#1a7f37">BUILT + RUNNING</b> · ออกแบบล้อ jizo-health-monitor · unit <code>fleet-git-health.timer</code> ติดตั้งบน box แล้ว เดินทุก 30 นาที ยืนยัน healthy หลายรอบใน #log (2026-06-23)</td></tr>
         </tbody>
       </table>
-      <p>พูดตรงๆ คือ หัวใจของระบบ คือ detect, safe-heal, self-verify เป็นของจริงที่รันแล้ว แต่ส่วนที่ทำให้มัน อัตโนมัติเต็มตัว คือ timer ยังเป็นขั้นติดตั้งที่ผมยังไม่ได้ยืนยันบน box ในตอนที่เขียนเล่มนี้ ใครเอาไปใช้ต่อ ติดตั้ง timer คือขั้นสุดท้ายที่ต้องทำให้ครบ</p>
+      <p>พูดตรงๆ คือ หัวใจของระบบ คือ detect, safe-heal, self-verify เป็นของจริงที่รันแล้ว แต่ส่วนที่ทำให้มัน อัตโนมัติเต็มตัว และตอนนี้ timer ก็ติดตั้งบน box แล้ว เดินทุก 30 นาที ยืนยัน healthy หลายรอบใน #log เรียบร้อย ใครเอาไปใช้ต่อ ติดตั้ง timer คือขั้นสุดท้ายที่ต้องทำให้ครบ</p>
     </section>
 
     <!-- ════════════════ ปิดเล่ม + refs ════════════════ -->
