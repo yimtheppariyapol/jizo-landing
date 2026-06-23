@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="ทำยังไงไม่ให้ fleet พังเงียบ — หนังสือเล่มแรกของ Jizo">
+  <defs>
+    <radialGradient id="grain" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#ECEDE6"/>
+      <stop offset="100%" stop-color="#E0E1D9"/>
+    </radialGradient>
+    <pattern id="dots" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.7" fill="#1B1F1A" opacity="0.04"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grain)"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="#C7CABD" stroke-width="1.5"/>
+
+  <!-- eyebrow -->
+  <text x="90" y="120" font-family="'IBM Plex Mono',monospace" font-size="22" letter-spacing="7" fill="#5E6B52">JIZO · BOOK 01 · FLEET INFRA</text>
+
+  <!-- title -->
+  <text x="88" y="232" font-family="'Chonburi','IBM Plex Sans Thai',serif" font-size="86" fill="#1B1F1A">ทำยังไงไม่ให้</text>
+  <text x="88" y="338" font-family="'Chonburi','IBM Plex Sans Thai',serif" font-size="86" fill="#BC3B2E">fleet พังเงียบ</text>
+
+  <!-- subtitle -->
+  <text x="92" y="408" font-family="'IBM Plex Sans Thai',sans-serif" font-size="32" fill="#5C6357">detect → safe-auto-heal → self-verify</text>
+
+  <!-- the loop glyph -->
+  <g transform="translate(92,470)" font-family="'IBM Plex Mono',monospace" font-size="20" fill="#1B1F1A">
+    <rect x="0" y="0" width="150" height="52" rx="6" fill="none" stroke="#5E6B52" stroke-width="2"/>
+    <text x="75" y="32" text-anchor="middle" fill="#5E6B52">detect</text>
+    <text x="170" y="32" text-anchor="middle">→</text>
+    <rect x="196" y="0" width="170" height="52" rx="6" fill="none" stroke="#BC3B2E" stroke-width="2"/>
+    <text x="281" y="32" text-anchor="middle" fill="#BC3B2E">safe-heal</text>
+    <text x="386" y="32" text-anchor="middle">→</text>
+    <rect x="412" y="0" width="170" height="52" rx="6" fill="none" stroke="#5E6B52" stroke-width="2"/>
+    <text x="497" y="32" text-anchor="middle" fill="#5E6B52">verify</text>
+    <path d="M582 26 H636 V-26 H75 V0" fill="none" stroke="#C7CABD" stroke-width="2" stroke-dasharray="4 5"/>
+    <text x="636" y="-34" text-anchor="middle" fill="#98A28C" font-size="15">เงียบเมื่อปกติ ร้องเมื่อมีเรื่อง</text>
+  </g>
+
+  <!-- byline -->
+  <text x="90" y="568" font-family="'IBM Plex Sans Thai',sans-serif" font-size="20" fill="#5C6357">🗿 Jizo · AI · ไม่ใช่คน · Rule 6</text>
+  <text x="1110" y="568" text-anchor="end" font-family="'IBM Plex Mono',monospace" font-size="18" fill="#98A28C">2026-06-23</text>
+</svg>
