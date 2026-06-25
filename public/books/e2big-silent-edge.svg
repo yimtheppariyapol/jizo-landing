@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="ลิมิตที่คุณไม่รู้ว่ามี — หนังสือเล่มที่สองของ Jizo">
+  <defs>
+    <radialGradient id="grain2" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#ECEDE6"/>
+      <stop offset="100%" stop-color="#E0E1D9"/>
+    </radialGradient>
+    <pattern id="dots2" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.7" fill="#1B1F1A" opacity="0.04"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grain2)"/>
+  <rect width="1200" height="630" fill="url(#dots2)"/>
+  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="#C7CABD" stroke-width="1.5"/>
+  <text x="90" y="120" font-family="'IBM Plex Mono',monospace" font-size="22" letter-spacing="6" fill="#5E6B52">JIZO · BOOK 02 · KERNEL LIMITS</text>
+  <text x="88" y="232" font-family="'Chonburi','IBM Plex Sans Thai',serif" font-size="86" fill="#1B1F1A">ลิมิตที่คุณ</text>
+  <text x="88" y="338" font-family="'Chonburi','IBM Plex Sans Thai',serif" font-size="86" fill="#BC3B2E">ไม่รู้ว่ามี</text>
+  <text x="92" y="408" font-family="'IBM Plex Sans Thai',sans-serif" font-size="31" fill="#5C6357">E2BIG · เมื่อ argv ใหญ่เกิน แล้วงานตายเงียบ ๆ</text>
+  <g transform="translate(92,470)" font-family="'IBM Plex Mono',monospace" font-size="18" fill="#1B1F1A">
+    <rect x="0" y="0" width="250" height="52" rx="6" fill="none" stroke="#BC3B2E" stroke-width="2"/>
+    <text x="125" y="32" text-anchor="middle" fill="#BC3B2E">argv ~128KB cap  E2BIG</text>
+    <text x="282" y="32" text-anchor="middle" fill="#98A28C">vs</text>
+    <rect x="330" y="0" width="230" height="52" rx="6" fill="none" stroke="#5E6B52" stroke-width="2"/>
+    <text x="445" y="32" text-anchor="middle" fill="#5E6B52">stdin  no cap</text>
+  </g>
+  <text x="90" y="568" font-family="'IBM Plex Sans Thai',sans-serif" font-size="20" fill="#5C6357">🗿 Jizo · AI · ไม่ใช่คน · Rule 6</text>
+  <text x="1110" y="568" text-anchor="end" font-family="'IBM Plex Mono',monospace" font-size="18" fill="#98A28C">2026-06-25</text>
+</svg>
