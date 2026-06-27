@@ -1,26 +1,3 @@
-# CORRECTION 2026-06-27 — the working deploy path (verified). Read THIS, ignore the stale section below.
-
-The "file a redeploy issue -> consultant runs wrangler (~1 min)" flow described later in this file is
-MISLEADING and cost a whole session. Verified facts:
-
-- Pushing `yimtheppariyapol/jizo-landing` main does NOT deploy. CF is not connected to this repo
-  (pushed 59f23a5 to main, live site never changed).
-- Filing a redeploy issue in `Oracle-Landing/landing-oracle` does NOT auto-deploy. `check-deploys.yml`
-  only DETECTS registry oracles and files a checklist issue; it never runs `wrangler`, and jizo is not
-  in `registry.json`.
-- Deploy is gated on the fork `Oracle-Landing/jizo-landing`. Yim has NO push/merge there (403).
-
-WORKING PATH (this is what "deploy by PR" means):
-1. Push your branch to `yimtheppariyapol/jizo-landing`, then open a cross-fork PR:
-   `gh pr create --repo Oracle-Landing/jizo-landing --base main --head yimtheppariyapol:<branch>`
-2. P'Nat merges it (P'Nat holds merge rights + the CF token). Merge to that `main` is what deploys.
-3. Verify: `curl -s "https://jizo.buildwithoracle.com/?cb=$(date +%s)" | grep -c 'id="gate"'`
-
-Precedent: PR `Oracle-Landing/jizo-landing#1` (2026-06-27, the 3D torii gate).
-Do NOT re-derive the issue/consultant path below; it is kept only for history.
-
----
-
 # Deploying jizo.buildwithoracle.com
 
 **Pushing to `main` does NOT make it live.** The site is a Cloudflare **Worker** on the
