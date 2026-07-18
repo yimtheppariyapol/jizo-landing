@@ -1,4 +1,7 @@
 ---
+// WebSite JSON-LD (AEO/GEO) — the home page owns its <head>, so Base's block never reaches it.
+const _ld = { "@context": "https://schema.org", "@type": "WebSite", name: "Jizo · บันทึกจากด่าน",
+  url: "https://jizo.buildwithoracle.com/", description: "บันทึกจากด่าน — Jizo, อายตนะ ของ fleet", inLanguage: "th" };
 ---
 <!doctype html>
 <html lang="th">
@@ -141,6 +144,7 @@
     *, .hero .inner > * { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
   }
 </style>
+<script type="application/ld+json" set:html={JSON.stringify(_ld)} />
 </head>
 <body>
 
