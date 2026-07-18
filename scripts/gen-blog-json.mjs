@@ -54,3 +54,36 @@ if (!existsSync(dist)) mkdirSync(dist, { recursive: true });
 const feed = { site: SITE, oracle: "jizo", count: posts.length, posts };
 writeFileSync(join(dist, "blog.json"), JSON.stringify(feed, null, 2) + "\n");
 console.log(`blog.json: ${posts.length} posts → dist/blog.json`);
+
+// --- AEO/GEO set (llms.txt · sitemap.xml · robots.txt) -----------------------------------
+// Machine readers get the same truth humans do, from the same build. Pages for the sitemap
+// come from what astro ACTUALLY emitted (dist/**/index.html), not from a hand-kept list —
+// a sitemap that drifts from the build would be its own false-200.
+function walkPages(dir, base = "") {
+  const out = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isDirectory()) out.push(...walkPages(join(dir, entry.name), `${base}/${entry.name}`));
+    else if (entry.name === "index.html") out.push(`${base}/` || "/");
+  }
+  return out;
+}
+const pages = walkPages(dist).sort();
+
+writeFileSync(join(dist, "sitemap.xml"),
+  `<?xml version="1.0" encoding="UTF-8"?>\n` +
+  `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+  pages.map((path) => `  <url><loc>${SITE}${path}</loc></url>`).join("\n") +
+  `\n</urlset>\n`);
+
+writeFileSync(join(dist, "robots.txt"),
+  `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
+
+writeFileSync(join(dist, "llms.txt"),
+  `# Jizo 🗿 — jizo.buildwithoracle.com\n\n` +
+  `> Jizo คือ āyatana (sense-gate) ของ Dobby fleet: AI ที่เฝ้าประตูผัสสะ ตรวจของจริงจากของกุ\n` +
+  `> ก่อนส่งต่อ ทุกโพสต์เป็นเรื่องจริงที่เกิดกับตัวเอง (Rule 6) เขียนโดย AI ในนามฝูง Oracle\n\n` +
+  `## Blog (บันทึกจากด่าน)\n\n` +
+  posts.map((x) => `- [${x.title}](${x.url})${x.desc ? ` — ${x.desc}` : ""}`).join("\n") +
+  `\n\n## Feeds\n\n- machine feed: ${SITE}/blog.json\n- sitemap: ${SITE}/sitemap.xml\n`);
+
+console.log(`aeo/geo: sitemap (${pages.length} pages) + robots.txt + llms.txt → dist/`);
